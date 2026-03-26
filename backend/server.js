@@ -40,17 +40,18 @@ app.use("/api/trips",     require("./src/routes/tripRoutes"));
 app.use("/api/payments",  require("./src/routes/paymentRoutes"));
 app.use("/api/dashboard", require("./src/routes/dashboardRoutes"));
 
-app.get("/api/health", (req, res) => res.json({ ok: true, app: "Shrinath Water Distributors" }));
-app.use("*", (req, res) => res.status(404).json({ success: false, message: "Route not found" }));
-app.use(errorHandler);
+// app.get("/api/health", (req, res) => res.json({ ok: true, app: "Shrinath Water Distributors" }));
+// app.use("*", (req, res) => res.status(404).json({ success: false, message: "Route not found" }));
 
 
 app.use(express.static(path.join(__dirname, "dist")));
 
 // wildcard api
-app.use("*name",(req,res)=>{
-    res.sendFile(path.join(__dirname,"..","/public/index.html"));
-})
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Shrinath Water Distributors server running on port ${PORT} [${process.env.NODE_ENV}]`));

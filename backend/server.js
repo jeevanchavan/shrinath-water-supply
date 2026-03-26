@@ -6,6 +6,7 @@ const rateLimit   = require("express-rate-limit");
 const dotenv      = require("dotenv");
 const connectDB   = require("./src/config/db");
 const errorHandler = require("./src/middleware/errorHandler");
+const path = require("path")
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ connectDB();
 
 const app = express();
 
+app.use(express.static("./public"))
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173", credentials: true }));
 app.use(express.json({ limit: "10kb" }));
@@ -41,6 +43,11 @@ app.use("/api/dashboard", require("./src/routes/dashboardRoutes"));
 app.get("/api/health", (req, res) => res.json({ ok: true, app: "Shrinath Water Distributors" }));
 app.use("*", (req, res) => res.status(404).json({ success: false, message: "Route not found" }));
 app.use(errorHandler);
+
+// wildcard api
+app.use("*name",(req,res)=>{
+    res.sendFile(path.join(__dirname,"..","/public/index.html"));
+})
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Shrinath Water Distributors server running on port ${PORT} [${process.env.NODE_ENV}]`));

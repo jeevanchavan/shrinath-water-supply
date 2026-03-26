@@ -24,6 +24,8 @@ connectDB();
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(express.static("./public"))
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_URL || "https://shrinath-water-distributors.onrender.com", credentials: true }));
